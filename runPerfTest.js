@@ -21,9 +21,14 @@ async function testSite() {
     const response = await page.goto(url, {
         waitUntil: ['networkidle0', 'domcontentloaded']
     });
-    const chain = response.request().redirectChain();
+    const performanceTiming = JSON.parse(
+        await page.evaluate(() => JSON.stringify(window.performance)),
+    );
+    console.log('performanceTiming', performanceTiming);
+    /*const chain = response.request().redirectChain();
     console.log(chain.length); // 1
-    //console.log(chain[0].url()); // 'http://example.com'
+    console.log(chain[0].url()); // 'http://example.com'
+    */
     await page.screenshot({ path: scrPath, fullpage: true });
     console.log("Test - Screenshot saved");
     await browser.close();
