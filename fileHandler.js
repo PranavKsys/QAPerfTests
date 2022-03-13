@@ -9,7 +9,7 @@ var resultFile;
 async function addUrl(site) {
     fs.writeFile(fileName, site + "\r\n", { flag: 'a+' }, function(err) {
         if (err) throw err;
-        console.log(fileName + ' created!');
+        console.log(`URL added to ${fileName}`);
     });
 }
 
@@ -34,7 +34,7 @@ async function addTimingResults(domain, performanceTiming) {
     perfTime = JSON.stringify(performanceTiming);
     fs.writeFile(resultFile, perfTime + "\r\n", { flag: 'a+' }, function(err) {
         if (err) throw err;
-        console.log('Page timing saved to ' + resultFile);
+        console.log(`Performance results added to ${resultFile}`);
     });
 }
 //check when the end of the text file has been reached
