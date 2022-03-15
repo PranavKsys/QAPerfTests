@@ -2,16 +2,24 @@ var fs = require('fs');
 const { Module } = require('module');
 const readline = require('readline');
 var fileName = 'testUrls.txt'; // store initial site URL and store sub page URLs from the crawler
-//var site = 'http://www.testwithinmodule.com';
+
+var resultFile;
+
 // add initial url and thereafter sub page urls to text file
-//accept (site)
+
 async function addUrl(site) {
     fs.writeFile(fileName, site + "\r\n", { flag: 'a+' }, function(err) {
         if (err) throw err;
-        console.log(fileName + ' created!');
+        console.log(`URL added to ${fileName}`);
     });
 }
 
+function createFolder(dir) {
+    if (!fs.existsSync(dir)) {
+        fs.mkdirSync(dir, { recursive: false });
+    }
+    return dir;
+}
 //get all sub page urls from text file
 async function getUrl() {
     const fileStream = fs.createReadStream(fileName);
@@ -23,10 +31,18 @@ async function getUrl() {
     // Note: we use the crlfDelay option to recognize all instances of CR LF
     // Each line will be successively available here as `line`.
     for await (const line of rl) {
-        console.log('Test URL: ' + line);
         testSite(line);
         console.log(line[rl]); // prints out each URL from the array
     }
+}
+
+async function addTimingResults(domain, performanceTiming, folder) {
+    resultFile = `${folder}/${domain}_timings.json`;
+    perfTime = JSON.stringify(performanceTiming);
+    fs.writeFile(resultFile, perfTime + "\r\n", { flag: 'a+' }, function(err) {
+        if (err) throw err;
+        console.log(`Performance results added to ${resultFile}`);
+    });
 }
 //check when the end of the text file has been reached
 function getEof() {
@@ -45,4 +61,4 @@ function getEof() {
     });
     return linesCount;
 }
-module.exports = { addUrl, getUrl, getEof }; //this .js file is a module which exports the function addUrl which can be called in another module (.js file)
+module.exports = { addUrl, getUrl, getEof, addTimingResults, createFolder }; //this .js file is a module which exports the function addUrl which can be called in another module (.js file)
