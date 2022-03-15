@@ -21,7 +21,7 @@ fileHandler.addUrl(url); //add URL to text file using fileHandler module
 testSite(); //call the function that tests URL given by user
 
 async function testSite() {
-    const browser = await puppeteer.launch(); //creates Chrome headless browser
+    const browser = await puppeteer.launch(); //open Chrome browser in headless state
     const page = await browser.newPage(); //creates a browser page - starts up the browser
     console.log('Measuring page performance...');
     const response = await page.goto(url, { //launch URL, wait until there are 0 network connections and all DOM content is loaded
@@ -30,9 +30,9 @@ async function testSite() {
     const performanceTiming = JSON.parse(
         await page.evaluate(() => JSON.stringify(window.performance)), //*** TASK - PranavD: convert output to time format readable by humans lol ***
     );
-    fileHandler.addTimingResults(domain, performanceTiming, folder);
-    await page.screenshot({ path: scrPath, fullpage: true });
+    fileHandler.addTimingResults(domain, performanceTiming, folder); //create JSON file and add timing results in a JSON format
+    await page.screenshot({ path: scrPath, fullpage: true }); //take screenshot, add to folder
     console.log(`Screenshot taken for ${domain}`);
-    await browser.close();
-    console.timeEnd();
+    await browser.close(); //wait for browser to close
+    console.timeEnd(); //stop timer and write to console time taken to run this test script
 }
