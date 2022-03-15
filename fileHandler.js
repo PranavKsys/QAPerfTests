@@ -2,6 +2,7 @@ var fs = require('fs');
 const { Module } = require('module');
 const readline = require('readline');
 var fileName = 'testUrls.txt'; // store initial site URL and store sub page URLs from the crawler
+
 var resultFile;
 
 // add initial url and thereafter sub page urls to text file
@@ -13,6 +14,12 @@ async function addUrl(site) {
     });
 }
 
+function createFolder(dir) {
+    if (!fs.existsSync(dir)) {
+        fs.mkdirSync(dir, { recursive: false });
+    }
+    return dir;
+}
 //get all sub page urls from text file
 async function getUrl() {
     const fileStream = fs.createReadStream(fileName);
@@ -29,8 +36,8 @@ async function getUrl() {
     }
 }
 
-async function addTimingResults(domain, performanceTiming) {
-    resultFile = domain + '_timings.json';
+async function addTimingResults(domain, performanceTiming, folder) {
+    resultFile = `${folder}/${domain}_timings.json`;
     perfTime = JSON.stringify(performanceTiming);
     fs.writeFile(resultFile, perfTime + "\r\n", { flag: 'a+' }, function(err) {
         if (err) throw err;
@@ -54,4 +61,4 @@ function getEof() {
     });
     return linesCount;
 }
-module.exports = { addUrl, getUrl, getEof, addTimingResults }; //this .js file is a module which exports the function addUrl which can be called in another module (.js file)
+module.exports = { addUrl, getUrl, getEof, addTimingResults, createFolder }; //this .js file is a module which exports the function addUrl which can be called in another module (.js file)
