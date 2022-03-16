@@ -5,6 +5,8 @@ var fileName = 'testUrls.txt'; // store initial site URL and store sub page URLs
 
 var resultFile;
 
+let testArrow = async() => console.log('function testArrow called :)'); //trying out fat arrow to do function assignments
+
 // add initial url and thereafter sub page urls to text file
 
 async function addUrl(site) {
@@ -36,8 +38,8 @@ async function getUrl() {
     }
 }
 
-async function addTimingResults(domain, performanceTiming, folder) {
-    resultFile = `${folder}/${domain}_timings.json`;
+async function addTimingResults(domain, performanceTiming, folder, timestamp) {
+    resultFile = `${folder}/${domain}_timings_${timestamp}.json`;
     perfTime = JSON.stringify(performanceTiming);
     fs.writeFile(resultFile, perfTime + "\r\n", { flag: 'a+' }, function(err) {
         if (err) throw err;
@@ -61,4 +63,4 @@ function getEof() {
     });
     return linesCount;
 }
-module.exports = { addUrl, getUrl, getEof, addTimingResults, createFolder }; //this .js file is a module which exports the function addUrl which can be called in another module (.js file)
+module.exports = { addUrl, getUrl, getEof, addTimingResults, createFolder, testArrow }; //this .js file is a module which exports the function addUrl which can be called in another module (.js file)
